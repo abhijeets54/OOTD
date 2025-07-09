@@ -38,7 +38,10 @@ const formSchema = z.object({
   ], {
     required_error: "Please select an occasion",
   }),
-  timeOfDay: z.number().min(0).max(24),
+  timeOfDay: z.number({
+    required_error: "Please select the time of the day",
+    invalid_type_error: "Please select the time of the day",
+  }).min(0).max(24),
 });
 
 const timeLabels = {
@@ -55,7 +58,7 @@ export function InitialQuestions({ onSubmit, formData }: any) {
       gender: undefined,
       religion: undefined,
       occasion: undefined,
-      timeOfDay: 8,
+      timeOfDay: 0,
     },
   });
 

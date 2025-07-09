@@ -199,10 +199,19 @@ export default function Footer() {
             <Heart className="inline h-4 w-4 text-red-500 mx-1" />
             for fashion enthusiasts.
           </p>
-          <div className="flex items-center space-x-6 text-sm text-gray-600">
-            <span>Made with Next.js & AI</span>
-            <span>•</span>
-            <span>Powered by Gemini AI</span>
+          <div className="flex items-center space-x-2 text-sm">
+            <span className="text-gray-600">Loved #OOTD?</span>
+            <motion.a
+              href="https://abhijeets-portfolio.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:shadow-lg transition-all duration-200 flex items-center space-x-1"
+            >
+              <span>Contact Developer</span>
+              <ExternalLink className="h-3 w-3" />
+            </motion.a>
           </div>
         </motion.div>
       </div>

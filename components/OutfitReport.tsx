@@ -4,62 +4,29 @@ import { useEffect, useRef, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { 
-  Shirt, 
-  Tangent as Pants, 
-  Shovel as Shoe, 
-  Crown, 
-  Gem, 
-  Palette, 
-  Lightbulb, 
-  Heart, 
-  Share2, 
+import {
+  Shirt,
+  Tangent as Pants,
+  Shovel as Shoe,
+  Crown,
+  Gem,
+  Palette,
+  Lightbulb,
+  Heart,
+  Share2,
   Printer,
   Twitter,
   Facebook,
   Instagram,
   Download,
-  RefreshCcw,
-  X
+  RefreshCcw
 } from "lucide-react";
 import { generateOutfitReport } from "@/lib/llama";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import html2canvas from 'html2canvas';
 import { FormData } from "@/lib/llama";
 
-// Custom notification component
-const FashionNotification = ({ message, onClose }: { message: string; onClose: () => void }) => (
-  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50 backdrop-blur-sm animate-fadeIn">
-    <div className="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-4 animate-scaleIn relative overflow-hidden">
-      <div className="absolute -top-10 -right-10 w-40 h-40 bg-gradient-to-br from-pink-300 via-purple-300 to-indigo-400 rounded-full opacity-20"></div>
-      <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-gradient-to-tr from-yellow-300 via-amber-200 to-orange-300 rounded-full opacity-20"></div>
-      
-      <button 
-        onClick={onClose} 
-        className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors"
-      >
-        <X size={20} />
-      </button>
-      
-      <div className="flex flex-col items-center text-center">
-        <div className="w-16 h-16 bg-gradient-to-r from-violet-600 to-indigo-600 rounded-full flex items-center justify-center mb-4 shadow-lg">
-          <Heart className="h-8 w-8 text-white" />
-        </div>
-        <h3 className="text-2xl font-bold bg-gradient-to-r from-violet-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">Fashion Success!</h3>
-        <p className="text-gray-600">{message}</p>
-      </div>
-      
-      <div className="mt-6 pt-4 border-t border-gray-100">
-        <Button 
-          onClick={onClose}
-          className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white transition-all duration-300"
-        >
-          Continue
-        </Button>
-      </div>
-    </div>
-  </div>
-);
+
 
 const TruckLoader = ({ message = "Currently delivering an iconic outfit for an icon like you ✨" }: { message?: string }) => (
   <div className="flex flex-col items-center justify-center py-8">
@@ -204,7 +171,6 @@ Gender: This outfit is designed for a ${formData.gender} individual and must be 
 
 export function OutfitReport({ formData }: { formData: FormData }){
   const reportRef = useRef(null);
-  const [notification, setNotification] = useState({ show: false, message: "" });
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [fallbackImageUrl, setFallbackImageUrl] = useState<string | null>(null);
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
@@ -301,10 +267,6 @@ export function OutfitReport({ formData }: { formData: FormData }){
         const imageUrl = await service.execute();
 
         setGeneratedImage(imageUrl);
-        setNotification({
-          show: true,
-          message: `Your outfit image has been generated successfully using ${service.name}!`
-        });
         setIsGeneratingImage(false);
         setCurrentService("");
         return;
@@ -321,11 +283,6 @@ export function OutfitReport({ formData }: { formData: FormData }){
     }
 
     // If all services fail
-    setNotification({
-      show: true,
-      message: "All image generation services are currently unavailable. Please try again in a few moments."
-    });
-
     setIsGeneratingImage(false);
     setCurrentService("");
   };
@@ -363,11 +320,6 @@ export function OutfitReport({ formData }: { formData: FormData }){
               link.download = 'my-ootd-outfit.png';
               link.href = image;
               link.click();
-              
-              setNotification({
-                show: true,
-                message: "Your outfit has been saved! Share it on Instagram to inspire others."
-              });
             } catch (err) {
               console.error('Error generating image:', err);
             }
@@ -446,12 +398,7 @@ export function OutfitReport({ formData }: { formData: FormData }){
         </div>
       )}
 
-      {notification.show && (
-        <FashionNotification
-          message={notification.message}
-          onClose={() => setNotification({ show: false, message: "" })}
-        />
-      )}
+
       
       <div className="flex justify-between items-center">
         <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-rose-500 bg-clip-text text-transparent">Your Personalized Outfit</h2>
@@ -649,10 +596,6 @@ export function OutfitReport({ formData }: { formData: FormData }){
                     setFallbackImageUrl(null); // Clear fallback to prevent infinite loop
                   } else {
                     setGeneratedImage(null);
-                    setNotification({
-                      show: true,
-                      message: "Failed to load generated image. Please try again."
-                    });
                   }
                 }}
               />
