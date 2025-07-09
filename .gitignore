@@ -33,3 +33,107 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# clerk configuration (can include secrets)
+/.clerk/
+
+# test files and temporary documentation
+test-*.js
+test-*.json
+*-test.js
+*-test.json
+*.test.js
+*.test.json
+
+# temporary documentation and development notes
+*_FIX.md
+*_IMPLEMENTATION.md
+*_UPDATE_EXAMPLE.md
+*_LOADERS.md
+TROUBLESHOOTING_*.md
+RANDOM_*.md
+FASHION_*.md
+NAVIGATION_*.md
+AI_*.md
+
+# personal files
+*.tex
+Resume*.tex
+resume*.tex
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Development tools and history
+.bolt/
+.history/
+.cursor/
+.replit/
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# next.js build output
+.next
+
+# nuxt.js build output
+.nuxt
+
+# vuepress build output
+.vuepress/dist
+
+# Serverless directories
+.serverless
+
+# FuseBox cache
+.fusebox/
+
+# DynamoDB Local files
+.dynamodb/
+
+# TernJS port file
+.tern-port

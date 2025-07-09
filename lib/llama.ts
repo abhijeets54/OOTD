@@ -1,7 +1,12 @@
 import axios from "axios";
 
-const LLAMA_API_URL = "/api/generate";
+const GEMINI_API_URL = "/api/generate";
 
+interface GeminiResponse {
+  response: string;
+}
+
+// Legacy interface for backward compatibility
 interface LlamaResponse {
   response: string;
 }
@@ -128,8 +133,8 @@ export async function generateDynamicQuestions(
       ANY DEVIATION FROM THIS SCHEMA WILL BE REJECTED.
     `;
 
-    const response = await axios.post("/api/generate", {
-      model: "llama3",
+    const response = await axios.post(GEMINI_API_URL, {
+      model: "gemini-2.5-flash", // Use fast model for dynamic questions
       prompt,
       stream: false,
       temperature: 0.7,
@@ -305,8 +310,8 @@ export async function generateOutfitReport(formData: FormData) {
       Remember that the client is a ${formData.gender} individual, so all recommendations must be appropriate for this gender.
     `;
 
-    const response = await axios.post<LlamaResponse>(LLAMA_API_URL, {
-      model: "llama3",
+    const response = await axios.post<GeminiResponse>(GEMINI_API_URL, {
+      model: "gemini-2.5-pro", // Use most capable model for outfit reports
       prompt,
       stream: false,
       temperature: 0.8, // Increased for more variety
@@ -314,7 +319,7 @@ export async function generateOutfitReport(formData: FormData) {
       format: "json",
     });
 
-    let parsedResponse;
+    let parsedResponse: any;
     try {
       // Clean the response before parsing
       const cleanedResponse = response.data.response
@@ -329,6 +334,7 @@ export async function generateOutfitReport(formData: FormData) {
         "upperWear",
         "lowerWear",
         "footwear",
+        "headwear",
         "accessories",
         "colors",
         "stylingTips",

@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
+import { RefreshCcw } from "lucide-react";
 
 import {
   Select,
@@ -16,7 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { generateDynamicQuestions, DynamicQuestion } from "@/lib/llama";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const LoadingDog = () => (
   <>
@@ -62,12 +63,18 @@ const LoadingDog = () => (
 
 export function DynamicQuestions({ onSubmit, initialData }: any) {
   const [responses, setResponses] = useState<Record<string, any>>({});
+  const queryClient = useQueryClient();
 
-  const { data: questions, isLoading, error } = useQuery({
+  const { data: questions, isLoading, error, refetch } = useQuery({
     queryKey: ['dynamicQuestions', initialData],
     queryFn: () => generateDynamicQuestions(initialData),
-    staleTime: 0,
-    retry: 2,
+    // Cache questions for the entire session to prevent regeneration
+    staleTime: Infinity, // Never consider stale
+    gcTime: Infinity, // Keep in cache indefinitely
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    retry: 1,
   });
 
   const handleResponse = (id: string, value: any) => {
@@ -79,6 +86,12 @@ export function DynamicQuestions({ onSubmit, initialData }: any) {
     onSubmit({ responses, questions });
   };
 
+  const handleRefresh = () => {
+    // Clear responses when regenerating questions
+    setResponses({});
+    refetch();
+  };
+
   if (isLoading) {
     return <LoadingDog />;
   }
@@ -87,7 +100,8 @@ export function DynamicQuestions({ onSubmit, initialData }: any) {
     return (
       <Card className="p-6">
         <p className="text-destructive">Error loading questions. Please try again.</p>
-        <Button onClick={() => window.location.reload()} className="mt-4">
+        <Button onClick={handleRefresh} className="mt-4">
+          <RefreshCcw className="w-4 h-4 mr-2" />
           Retry
         </Button>
       </Card>
@@ -95,8 +109,24 @@ export function DynamicQuestions({ onSubmit, initialData }: any) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {questions?.map((q: DynamicQuestion) => (
+    <div className="space-y-6">
+      {/* Header with refresh button */}
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-semibold">Style Preferences</h2>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={handleRefresh}
+          className="flex items-center gap-2"
+        >
+          <RefreshCcw className="w-4 h-4" />
+          Generate New Questions
+        </Button>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {questions?.map((q: DynamicQuestion) => (
         <Card key={q.id} className="p-6">
           <Label className="text-lg mb-4 block">{q.question}</Label>
           {q.type === "select" && (
@@ -181,6 +211,7 @@ export function DynamicQuestions({ onSubmit, initialData }: any) {
         </Button>
         <Button type="submit">Generate Outfit</Button>
       </div>
-    </form>
+      </form>
+    </div>
   );
 }
