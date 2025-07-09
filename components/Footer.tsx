@@ -163,7 +163,7 @@ export default function Footer() {
                 <Linkedin className="h-5 w-5 text-gray-700 hover:text-gray-900" />
               </motion.a>
               <motion.a
-                href="https://twitter.com/abhijeets54"
+                href="https://twitter.com/abhijeets09"
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.1 }}
@@ -173,7 +173,7 @@ export default function Footer() {
                 <Twitter className="h-5 w-5 text-gray-700 hover:text-gray-900" />
               </motion.a>
               <motion.a
-                href="https://instagram.com/abhijeets54"
+                href="https://instagram.com/abhijeets72"
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.1 }}
