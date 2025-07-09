@@ -8,6 +8,13 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "overrides": {
+    "react-is": "^19.0.0",
+    "cmdk": {
+      "react": "^19.1.0",
+      "react-dom": "^19.1.0"
+    }
+  },
   "dependencies": {
     "@clerk/nextjs": "^6.13.0",
     "@google/generative-ai": "^0.24.1",
