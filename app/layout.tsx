@@ -48,7 +48,7 @@ export default function RootLayout({
               <Footer />
             </Providers>
           </div>
-          <Analytics />
+          <Analytics mode="production" />
         </body>
       </html>
     </ClerkProvider>
