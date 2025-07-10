@@ -38,7 +38,7 @@ export default function Navigation() {
               <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 bg-clip-text text-transparent">
                 #OOTD
               </span>
-              <span className="text-xs text-gray-500 -mt-1">AI Fashion Stylist</span>
+              <span className="text-xs text-gray-500 -mt-1">AI-Powered Fashion Stylist</span>
             </div>
           </LoaderLink>
 

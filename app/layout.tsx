@@ -15,10 +15,30 @@ import { Analytics } from '@vercel/analytics/next';
 // }); // Temporarily disabled to fix build issues
 
 export const metadata: Metadata = {
-  title: '#OOTD - AI Fashion Stylist',
+  title: '#OOTD - AI-Powered Fashion Stylist',
   description: 'Transform your style with AI-powered outfit recommendations, style analysis, and personalized fashion insights. Your personal fashion stylist powered by artificial intelligence.',
   keywords: 'AI fashion, outfit analyzer, style recommendations, fashion AI, personal stylist, outfit generator',
   authors: [{ name: 'OOTD Team' }],
+  icons: {
+    icon: [
+      {
+        url: '/favicon.ico',
+        sizes: '32x32',
+      },
+      {
+        url: '/icon-192.png',
+        sizes: '192x192',
+        type: 'image/png',
+      },
+    ],
+    apple: [
+      {
+        url: '/apple-icon.png',
+        sizes: '180x180',
+        type: 'image/png',
+      },
+    ],
+  },
   openGraph: {
     title: '#OOTD - AI Fashion Stylist',
     description: 'Transform your style with AI-powered outfit recommendations and style analysis.',
