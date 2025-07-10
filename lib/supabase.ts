@@ -8,7 +8,8 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 export function createServerSupabaseClient() {
   return createClient(supabaseUrl, supabaseAnonKey, {
     async accessToken() {
-      return (await auth()).getToken()
+      const token = await (await auth()).getToken({ template: 'supabase' });
+      return token;
     },
   })
 }

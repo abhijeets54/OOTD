@@ -73,20 +73,17 @@ export default function OutfitDetailPage() {
 
   const loadOutfit = async () => {
     try {
-      const response = await fetch('/api/outfits');
+      const response = await fetch(`/api/outfits/${outfitId}`);
       if (!response.ok) {
-        throw new Error('Failed to load outfits');
+        if (response.status === 404) {
+          toast.error('Outfit not found');
+          router.push('/outfits');
+          return;
+        }
+        throw new Error('Failed to load outfit');
       }
       const data = await response.json();
-      const foundOutfit = data.outfits?.find((o: Outfit) => o.id === outfitId);
-      
-      if (!foundOutfit) {
-        toast.error('Outfit not found');
-        router.push('/outfits');
-        return;
-      }
-      
-      setOutfit(foundOutfit);
+      setOutfit(data.outfit);
     } catch (error) {
       console.error('Error loading outfit:', error);
       toast.error('Failed to load outfit');

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { useUser, useAuth } from '@clerk/nextjs';
+import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -22,8 +22,7 @@ interface UploadedImage {
 }
 
 export default function CreateOutfitPage() {
-  const { user, isLoaded } = useUser();
-  const { getToken } = useAuth();
+  const { isLoaded } = useUser();
   const router = useRouter();
   const [formData, setFormData] = useState({
     title: '',
@@ -96,14 +95,10 @@ export default function CreateOutfitPage() {
 
     setSaving(true);
     try {
-      // Get the session token for authentication
-      const token = await getToken();
-
       const response = await fetch('/api/outfits', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           title: formData.title,

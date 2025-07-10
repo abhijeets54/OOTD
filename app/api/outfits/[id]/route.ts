@@ -3,6 +3,67 @@ import { auth } from '@clerk/nextjs/server';
 import { createServerSupabaseClient } from '@/lib/supabase';
 import { cloudinaryHelpers } from '@/lib/cloudinary';
 
+// GET - Get specific outfit
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    const { id: outfitId } = await params;
+    const supabase = createServerSupabaseClient();
+
+    // Get user from database
+    const { data: user, error: userError } = await supabase
+      .from('users')
+      .select('*')
+      .eq('clerk_user_id', userId)
+      .single();
+
+    if (userError && userError.code !== 'PGRST116') {
+      throw userError;
+    }
+
+    if (!user) {
+      return NextResponse.json(
+        { error: 'User not found' },
+        { status: 404 }
+      );
+    }
+
+    // Get specific outfit
+    const { data: outfit, error: outfitError } = await supabase
+      .from('outfits')
+      .select('*')
+      .eq('id', outfitId)
+      .eq('user_id', user.id)
+      .single();
+
+    if (outfitError || !outfit) {
+      return NextResponse.json(
+        { error: 'Outfit not found' },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ outfit });
+
+  } catch (error: any) {
+    console.error('Get outfit error:', error);
+    return NextResponse.json(
+      { error: 'Failed to get outfit' },
+      { status: 500 }
+    );
+  }
+}
+
 // PUT - Update outfit
 export async function PUT(
   request: Request,
