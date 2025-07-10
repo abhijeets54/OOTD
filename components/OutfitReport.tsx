@@ -25,6 +25,7 @@ import { generateOutfitReport } from "@/lib/llama";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import html2canvas from 'html2canvas';
 import { FormData } from "@/lib/llama";
+import { fashionToast } from '@/lib/toast';
 
 
 
@@ -262,13 +263,13 @@ export function OutfitReport({ formData }: { formData: FormData }){
     for (const service of services) {
       try {
         setCurrentService(service.name);
-        console.log(`Trying ${service.name}...`);
 
         const imageUrl = await service.execute();
 
         setGeneratedImage(imageUrl);
         setIsGeneratingImage(false);
         setCurrentService("");
+        fashionToast.success('Outfit Image Generated! 🎨', 'Your AI-generated outfit visualization is ready');
         return;
 
       } catch (error) {
@@ -277,6 +278,7 @@ export function OutfitReport({ formData }: { formData: FormData }){
         // If this is the last service, show a more detailed error
         if (service === services[services.length - 1]) {
           console.error('All services failed, last error:', error);
+          fashionToast.api.error('Image Generation', 'All image generation services are currently unavailable. Please try again later.');
         }
         continue;
       }
@@ -320,19 +322,23 @@ export function OutfitReport({ formData }: { formData: FormData }){
               link.download = 'my-ootd-outfit.png';
               link.href = image;
               link.click();
+              fashionToast.success('Download Started! 📥', 'Your outfit report is being downloaded as an image');
             } catch (err) {
               console.error('Error generating image:', err);
+              fashionToast.api.error('Download Failed', 'Unable to generate image for download. Please try again.');
             }
           }
           break;
       }
     } catch (error) {
       console.error('Error sharing:', error);
+      fashionToast.api.error('Share Failed', 'Unable to share your outfit. Please try again.');
     }
   };
 
   const handlePrint = () => {
     window.print();
+    fashionToast.info('Print Dialog Opened 🖨️', 'Your outfit report is ready to print');
   };
 
   const handleRetry = () => {
@@ -346,8 +352,10 @@ export function OutfitReport({ formData }: { formData: FormData }){
 
     try {
       await refetch();
+      fashionToast.outfit.generated();
     } catch (error) {
       console.error('Error regenerating outfit:', error);
+      fashionToast.api.error('Regenerate Outfit', 'Failed to regenerate outfit recommendations. Please try again.');
     } finally {
       setIsRegenerating(false);
     }
@@ -596,6 +604,7 @@ export function OutfitReport({ formData }: { formData: FormData }){
                     setFallbackImageUrl(null); // Clear fallback to prevent infinite loop
                   } else {
                     setGeneratedImage(null);
+                    fashionToast.warning('Image Load Failed', 'The generated image could not be displayed. Please try generating a new one.');
                   }
                 }}
               />

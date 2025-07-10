@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Loader2, Save, Sparkles, ArrowLeft } from 'lucide-react';
-import { toast } from 'sonner';
+import { fashionToast } from '@/lib/toast';
 import SimpleImageUpload from '@/components/SimpleImageUpload';
 import Link from 'next/link';
 
@@ -51,9 +51,9 @@ export default function CreateOutfitPage() {
 
   const analyzeImage = async (imageUrl?: string) => {
     const urlToAnalyze = imageUrl || uploadedImage?.secure_url;
-    
+
     if (!urlToAnalyze) {
-      toast.error('Please upload an image first');
+      fashionToast.warning('Please upload an image first', 'An image is required for AI analysis');
       return;
     }
 
@@ -78,10 +78,10 @@ export default function CreateOutfitPage() {
 
       const data = await response.json();
       setAiAnalysis(data.analysis);
-      toast.success('Image analyzed successfully!');
+      fashionToast.outfit.analyzed();
     } catch (error) {
       console.error('Error analyzing image:', error);
-      toast.error('Failed to analyze image');
+      fashionToast.api.error('Image Analysis', 'Failed to analyze image. Please try again.');
     } finally {
       setAnalyzing(false);
     }
@@ -89,7 +89,7 @@ export default function CreateOutfitPage() {
 
   const handleSave = async () => {
     if (!formData.title || !formData.occasion || !formData.timeOfDay) {
-      toast.error('Please fill in all required fields');
+      fashionToast.form.validation('Please fill in all required fields: title, occasion, and time of day');
       return;
     }
 
@@ -115,11 +115,11 @@ export default function CreateOutfitPage() {
         throw new Error('Failed to save outfit');
       }
 
-      toast.success('Outfit saved successfully!');
+      fashionToast.outfit.saved(formData.title);
       router.push('/outfits');
     } catch (error) {
       console.error('Error saving outfit:', error);
-      toast.error('Failed to save outfit');
+      fashionToast.api.error('Save Outfit', 'Failed to save outfit. Please try again.');
     } finally {
       setSaving(false);
     }

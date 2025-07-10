@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/select";
 import { generateDynamicQuestions, DynamicQuestion } from "@/lib/llama";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { fashionToast } from '@/lib/toast';
 
 const LoadingDog = () => (
   <>
@@ -97,6 +98,7 @@ export function DynamicQuestions({ onSubmit, initialData }: any) {
   }
 
   if (error) {
+    fashionToast.api.error('Load Questions', 'Failed to load personalized questions. Please try again.');
     return (
       <Card className="p-6">
         <p className="text-destructive">Error loading questions. Please try again.</p>

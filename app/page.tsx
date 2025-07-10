@@ -114,9 +114,9 @@ const HeroSection = () => {
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="relative flex justify-center flex-shrink-0"
+            className="relative flex justify-center flex-shrink-0 mt-14"
           >
-            <div className="relative group w-80 h-96">
+            <div className="relative group w-96 h-[28rem]">
               {/* Glossy overlay effects */}
               <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent rounded-2xl z-10 pointer-events-none"></div>
               <div className="absolute top-3 left-3 w-20 h-20 bg-gradient-to-br from-white/40 to-transparent rounded-full blur-lg z-10 pointer-events-none"></div>

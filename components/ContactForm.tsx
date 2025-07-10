@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Mail, Send, User, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
+import { fashionToast } from '@/lib/toast';
 
 interface ContactFormProps {
   title?: string;
@@ -42,13 +43,16 @@ export default function ContactForm({
       if (response.ok) {
         setIsSubmitted(true);
         form.reset();
+        fashionToast.form.submitted('contact message');
       } else {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Form submission failed');
       }
     } catch (error) {
       console.error('Error submitting form:', error);
-      setError(error instanceof Error ? error.message : 'There was an error submitting your message. Please try again.');
+      const errorMessage = error instanceof Error ? error.message : 'There was an error submitting your message. Please try again.';
+      setError(errorMessage);
+      fashionToast.form.error('contact message', errorMessage);
     } finally {
       setIsSubmitting(false);
     }

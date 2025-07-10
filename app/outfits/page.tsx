@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { CldImage } from 'next-cloudinary';
 import { Loader2, Plus, Heart, Star, Trash2, Eye, Calendar, Clock } from 'lucide-react';
-import { toast } from 'sonner';
+import { fashionToast, confirmAction } from '@/lib/toast';
 import Link from 'next/link';
 import { LoaderLink } from '@/components/ui/LoaderLink';
 
@@ -46,38 +46,49 @@ export default function OutfitsPage() {
       setOutfits(data.outfits || []);
     } catch (error) {
       console.error('Error loading outfits:', error);
-      toast.error('Failed to load outfits');
+      fashionToast.error('Failed to load outfits');
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async (outfitId: string) => {
-    if (!confirm('Are you sure you want to delete this outfit?')) {
-      return;
-    }
+    const outfit = outfits.find(o => o.id === outfitId);
 
-    setDeletingId(outfitId);
-    try {
-      const response = await fetch(`/api/outfits/${outfitId}`, {
-        method: 'DELETE'
-      });
+    confirmAction(
+      `This will permanently delete "${outfit?.title || 'this outfit'}" from your collection.`,
+      async () => {
+        setDeletingId(outfitId);
+        try {
+          const response = await fetch(`/api/outfits/${outfitId}`, {
+            method: 'DELETE'
+          });
 
-      if (!response.ok) {
-        throw new Error('Failed to delete outfit');
+          if (!response.ok) {
+            throw new Error('Failed to delete outfit');
+          }
+
+          setOutfits(prev => prev.filter(outfit => outfit.id !== outfitId));
+          fashionToast.outfit.deleted(outfit?.title);
+        } catch (error) {
+          console.error('Error deleting outfit:', error);
+          fashionToast.api.error('Delete Outfit', 'Failed to delete outfit. Please try again.');
+        } finally {
+          setDeletingId(null);
+        }
+      },
+      {
+        title: 'Delete Outfit?',
+        confirmLabel: 'Delete',
+        cancelLabel: 'Keep',
+        description: 'This action cannot be undone.',
       }
-
-      setOutfits(prev => prev.filter(outfit => outfit.id !== outfitId));
-      toast.success('Outfit deleted successfully');
-    } catch (error) {
-      console.error('Error deleting outfit:', error);
-      toast.error('Failed to delete outfit');
-    } finally {
-      setDeletingId(null);
-    }
+    );
   };
 
   const toggleFavorite = async (outfitId: string, currentFavorite: boolean) => {
+    const outfit = outfits.find(o => o.id === outfitId);
+
     try {
       const response = await fetch(`/api/outfits/${outfitId}`, {
         method: 'PUT',
@@ -89,16 +100,20 @@ export default function OutfitsPage() {
         throw new Error('Failed to update favorite status');
       }
 
-      setOutfits(prev => prev.map(outfit => 
-        outfit.id === outfitId 
+      setOutfits(prev => prev.map(outfit =>
+        outfit.id === outfitId
           ? { ...outfit, is_favorite: !currentFavorite }
           : outfit
       ));
 
-      toast.success(currentFavorite ? 'Removed from favorites' : 'Added to favorites');
+      if (currentFavorite) {
+        fashionToast.outfit.unfavorited(outfit?.title);
+      } else {
+        fashionToast.outfit.favorited(outfit?.title);
+      }
     } catch (error) {
       console.error('Error updating favorite:', error);
-      toast.error('Failed to update favorite status');
+      fashionToast.api.error('Update Favorite', 'Failed to update favorite status. Please try again.');
     }
   };
 

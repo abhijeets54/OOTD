@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Upload, X, Camera, Loader2 } from 'lucide-react';
 import Image from 'next/image';
+import { fashionToast } from '@/lib/toast';
 
 interface SimpleImageUploadProps {
   onImageUpload: (result: {
@@ -39,13 +40,13 @@ export default function SimpleImageUpload({
 
     // Validate file type
     if (!file.type.startsWith('image/')) {
-      alert('Please select an image file');
+      fashionToast.upload.invalidFile();
       return;
     }
 
     // Validate file size (10MB)
     if (file.size > 10 * 1024 * 1024) {
-      alert('File size must be less than 10MB');
+      fashionToast.upload.fileTooLarge();
       return;
     }
 
@@ -81,10 +82,11 @@ export default function SimpleImageUpload({
         height: result.height,
       });
 
+      fashionToast.upload.success();
       setPreview(null);
     } catch (error) {
       console.error('Upload error:', error);
-      alert('Upload failed. Please try again.');
+      fashionToast.upload.error('Upload failed. Please try again.');
       setPreview(null);
     } finally {
       setIsUploading(false);

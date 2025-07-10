@@ -10,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Loader2, Save, User, Settings, Heart } from 'lucide-react';
-import { toast } from 'sonner';
+import { fashionToast } from '@/lib/toast';
 
 interface UserProfile {
   id: string;
@@ -85,7 +85,7 @@ export default function ProfilePage() {
       });
     } catch (error) {
       console.error('Error loading profile:', error);
-      toast.error('Failed to load profile');
+      fashionToast.error('Failed to load profile');
     } finally {
       setLoading(false);
     }
@@ -106,11 +106,11 @@ export default function ProfilePage() {
 
       if (response.status === 409) {
         // User already exists, just load the profile
-        console.log('User already exists, loading existing profile');
         const getResponse = await fetch('/api/user');
         if (getResponse.ok) {
           const data = await getResponse.json();
           setProfile(data.user);
+          fashionToast.info('Profile Loaded', 'Welcome back! Your profile has been loaded successfully.');
           return;
         }
       }
@@ -121,7 +121,7 @@ export default function ProfilePage() {
 
       const data = await response.json();
       setProfile(data.user);
-      
+
       // Set initial form data
       setFormData({
         email: clerkUser?.emailAddresses[0]?.emailAddress || '',
@@ -134,9 +134,11 @@ export default function ProfilePage() {
         budgetRange: '',
         comfortPriority: 5
       });
+
+      fashionToast.success('Profile Created! 👤', 'Your profile has been created successfully. You can now customize your style preferences.');
     } catch (error) {
       console.error('Error creating profile:', error);
-      toast.error('Failed to create profile');
+      fashionToast.api.error('Create Profile', 'Failed to create your profile. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -169,10 +171,10 @@ export default function ProfilePage() {
 
       const data = await response.json();
       setProfile(data.user);
-      toast.success('Profile updated successfully!');
+      fashionToast.success('Profile Updated! ✨', 'Your style preferences have been saved successfully.');
     } catch (error) {
       console.error('Error updating profile:', error);
-      toast.error('Failed to update profile');
+      fashionToast.api.error('Update Profile', 'Failed to update your profile. Please try again.');
     } finally {
       setSaving(false);
     }

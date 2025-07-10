@@ -5,6 +5,7 @@ import { CldUploadWidget, CldImage } from 'next-cloudinary';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Upload, X, Camera } from 'lucide-react';
+import { fashionToast } from '@/lib/toast';
 
 interface ImageUploadProps {
   onImageUpload: (result: {
@@ -39,13 +40,13 @@ export default function ImageUpload({
       width: result.info.width,
       height: result.info.height,
     });
+    fashionToast.upload.success();
   };
 
   const handleUploadError = (error: any) => {
     setIsUploading(false);
     console.error('Upload error:', error);
-    // You could add a toast notification here
-    alert('Upload failed. Please check your Cloudinary configuration.');
+    fashionToast.upload.error('Please check your Cloudinary configuration.');
   };
 
   const handleRemoveImage = () => {

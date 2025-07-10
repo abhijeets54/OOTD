@@ -21,7 +21,7 @@ import {
   DollarSign,
   Shirt
 } from 'lucide-react';
-import { toast } from 'sonner';
+import { fashionToast, confirmAction } from '@/lib/toast';
 import Link from 'next/link';
 
 interface OutfitAnalysis {
@@ -76,7 +76,7 @@ export default function OutfitDetailPage() {
       const response = await fetch(`/api/outfits/${outfitId}`);
       if (!response.ok) {
         if (response.status === 404) {
-          toast.error('Outfit not found');
+          fashionToast.error('Outfit not found', 'The outfit you\'re looking for doesn\'t exist or has been deleted.');
           router.push('/outfits');
           return;
         }
@@ -86,7 +86,7 @@ export default function OutfitDetailPage() {
       setOutfit(data.outfit);
     } catch (error) {
       console.error('Error loading outfit:', error);
-      toast.error('Failed to load outfit');
+      fashionToast.api.error('Load Outfit', 'Failed to load outfit details. Please try again.');
       router.push('/outfits');
     } finally {
       setLoading(false);
@@ -94,28 +94,37 @@ export default function OutfitDetailPage() {
   };
 
   const handleDelete = async () => {
-    if (!outfit || !confirm('Are you sure you want to delete this outfit?')) {
-      return;
-    }
+    if (!outfit) return;
 
-    setDeleting(true);
-    try {
-      const response = await fetch(`/api/outfits/${outfit.id}`, {
-        method: 'DELETE'
-      });
+    confirmAction(
+      `This will permanently delete "${outfit.title}" from your collection.`,
+      async () => {
+        setDeleting(true);
+        try {
+          const response = await fetch(`/api/outfits/${outfit.id}`, {
+            method: 'DELETE'
+          });
 
-      if (!response.ok) {
-        throw new Error('Failed to delete outfit');
+          if (!response.ok) {
+            throw new Error('Failed to delete outfit');
+          }
+
+          fashionToast.outfit.deleted(outfit.title);
+          router.push('/outfits');
+        } catch (error) {
+          console.error('Error deleting outfit:', error);
+          fashionToast.api.error('Delete Outfit', 'Failed to delete outfit. Please try again.');
+        } finally {
+          setDeleting(false);
+        }
+      },
+      {
+        title: 'Delete Outfit?',
+        confirmLabel: 'Delete',
+        cancelLabel: 'Keep',
+        description: 'This action cannot be undone.',
       }
-
-      toast.success('Outfit deleted successfully');
-      router.push('/outfits');
-    } catch (error) {
-      console.error('Error deleting outfit:', error);
-      toast.error('Failed to delete outfit');
-    } finally {
-      setDeleting(false);
-    }
+    );
   };
 
   const toggleFavorite = async () => {
@@ -133,10 +142,15 @@ export default function OutfitDetailPage() {
       }
 
       setOutfit(prev => prev ? { ...prev, is_favorite: !prev.is_favorite } : null);
-      toast.success(outfit.is_favorite ? 'Removed from favorites' : 'Added to favorites');
+
+      if (outfit.is_favorite) {
+        fashionToast.outfit.unfavorited(outfit.title);
+      } else {
+        fashionToast.outfit.favorited(outfit.title);
+      }
     } catch (error) {
       console.error('Error updating favorite:', error);
-      toast.error('Failed to update favorite status');
+      fashionToast.api.error('Update Favorite', 'Failed to update favorite status. Please try again.');
     }
   };
 
