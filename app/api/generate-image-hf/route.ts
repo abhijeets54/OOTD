@@ -30,8 +30,6 @@ export async function POST(request: Request) {
     const timeoutId = setTimeout(() => controller.abort(), 45000); // 45 second timeout
 
     try {
-      console.log('Trying Hugging Face Inference Providers API with FLUX.1-schnell');
-
       // Use the new Inference Providers API with FLUX.1-schnell (free model)
       const response = await fetch(
         'https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell',
@@ -71,7 +69,6 @@ export async function POST(request: Request) {
         });
       } else {
         const errorText = await response.text();
-        console.error('Hugging Face FLUX API error:', response.status, errorText);
 
         // Check for specific error types
         if (response.status === 503) {
@@ -103,7 +100,6 @@ export async function POST(request: Request) {
 
     } catch (modelError) {
       clearTimeout(timeoutId);
-      console.error('Hugging Face request failed:', modelError);
 
       // Handle timeout errors
       if (modelError instanceof Error && modelError.name === 'AbortError') {
@@ -117,8 +113,6 @@ export async function POST(request: Request) {
     }
 
   } catch (error) {
-    console.error('Hugging Face image generation error:', error);
-
     return NextResponse.json({
       success: false,
       error: 'Hugging Face service failed'

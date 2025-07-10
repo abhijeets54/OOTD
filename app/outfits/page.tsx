@@ -45,7 +45,6 @@ export default function OutfitsPage() {
       const data = await response.json();
       setOutfits(data.outfits || []);
     } catch (error) {
-      console.error('Error loading outfits:', error);
       fashionToast.error('Failed to load outfits');
     } finally {
       setLoading(false);
@@ -71,7 +70,6 @@ export default function OutfitsPage() {
           setOutfits(prev => prev.filter(outfit => outfit.id !== outfitId));
           fashionToast.outfit.deleted(outfit?.title);
         } catch (error) {
-          console.error('Error deleting outfit:', error);
           fashionToast.api.error('Delete Outfit', 'Failed to delete outfit. Please try again.');
         } finally {
           setDeletingId(null);
@@ -112,7 +110,6 @@ export default function OutfitsPage() {
         fashionToast.outfit.favorited(outfit?.title);
       }
     } catch (error) {
-      console.error('Error updating favorite:', error);
       fashionToast.api.error('Update Favorite', 'Failed to update favorite status. Please try again.');
     }
   };

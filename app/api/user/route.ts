@@ -22,7 +22,6 @@ export async function GET() {
 
     // If user doesn't exist, create them
     if (error && error.code === 'PGRST116') {
-      console.log('User not found, creating new user for:', userId);
       const { data: newUser, error: createError } = await supabase
         .from('users')
         .insert({
@@ -33,7 +32,6 @@ export async function GET() {
         .single();
 
       if (createError) {
-        console.error('Error creating user:', createError);
         throw createError;
       }
 
@@ -52,7 +50,6 @@ export async function GET() {
     return NextResponse.json({ user });
 
   } catch (error: any) {
-    console.error('Get user error:', error);
     return NextResponse.json(
       { error: 'Failed to get user profile' },
       { status: 500 }
@@ -108,7 +105,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ user }, { status: 201 });
 
   } catch (error: any) {
-    console.error('Create user error:', error);
     return NextResponse.json(
       { error: 'Failed to create user profile' },
       { status: 500 }
@@ -152,7 +148,6 @@ export async function PUT(request: Request) {
     return NextResponse.json({ user });
 
   } catch (error: any) {
-    console.error('Update user error:', error);
     return NextResponse.json(
       { error: 'Failed to update user profile' },
       { status: 500 }

@@ -73,8 +73,6 @@ export async function POST(request: Request) {
     });
 
   } catch (error: any) {
-    console.error('Image analysis error:', error);
-
     // Handle specific error types
     if (error.message.includes('Failed to analyze')) {
       return NextResponse.json(

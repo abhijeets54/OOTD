@@ -80,7 +80,6 @@ export default function CreateOutfitPage() {
       setAiAnalysis(data.analysis);
       fashionToast.outfit.analyzed();
     } catch (error) {
-      console.error('Error analyzing image:', error);
       fashionToast.api.error('Image Analysis', 'Failed to analyze image. Please try again.');
     } finally {
       setAnalyzing(false);
@@ -118,7 +117,6 @@ export default function CreateOutfitPage() {
       fashionToast.outfit.saved(formData.title);
       router.push('/outfits');
     } catch (error) {
-      console.error('Error saving outfit:', error);
       fashionToast.api.error('Save Outfit', 'Failed to save outfit. Please try again.');
     } finally {
       setSaving(false);

@@ -273,11 +273,8 @@ export function OutfitReport({ formData }: { formData: FormData }){
         return;
 
       } catch (error) {
-        console.log(`${service.name} failed:`, error);
-
         // If this is the last service, show a more detailed error
         if (service === services[services.length - 1]) {
-          console.error('All services failed, last error:', error);
           fashionToast.api.error('Image Generation', 'All image generation services are currently unavailable. Please try again later.');
         }
         continue;
@@ -324,14 +321,12 @@ export function OutfitReport({ formData }: { formData: FormData }){
               link.click();
               fashionToast.success('Download Started! 📥', 'Your outfit report is being downloaded as an image');
             } catch (err) {
-              console.error('Error generating image:', err);
               fashionToast.api.error('Download Failed', 'Unable to generate image for download. Please try again.');
             }
           }
           break;
       }
     } catch (error) {
-      console.error('Error sharing:', error);
       fashionToast.api.error('Share Failed', 'Unable to share your outfit. Please try again.');
     }
   };
@@ -354,7 +349,6 @@ export function OutfitReport({ formData }: { formData: FormData }){
       await refetch();
       fashionToast.outfit.generated();
     } catch (error) {
-      console.error('Error regenerating outfit:', error);
       fashionToast.api.error('Regenerate Outfit', 'Failed to regenerate outfit recommendations. Please try again.');
     } finally {
       setIsRegenerating(false);
@@ -595,11 +589,8 @@ export function OutfitReport({ formData }: { formData: FormData }){
                 alt="AI Generated Outfit"
                 className="w-full h-auto rounded-lg shadow-lg border-2 border-gray-200"
                 onError={() => {
-                  console.error('Image failed to load:', generatedImage);
-
                   // Try fallback URL if available
                   if (fallbackImageUrl && generatedImage !== fallbackImageUrl) {
-                    console.log('Trying fallback URL:', fallbackImageUrl);
                     setGeneratedImage(fallbackImageUrl);
                     setFallbackImageUrl(null); // Clear fallback to prevent infinite loop
                   } else {

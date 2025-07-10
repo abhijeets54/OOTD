@@ -29,7 +29,6 @@ export async function GET(
 
     // If user doesn't exist, create them
     if (userError && userError.code === 'PGRST116') {
-      console.log('User not found, creating new user for:', userId);
       const { data: newUser, error: createError } = await supabase
         .from('users')
         .insert({
@@ -40,7 +39,6 @@ export async function GET(
         .single();
 
       if (createError) {
-        console.error('Error creating user:', createError);
         throw createError;
       }
 
@@ -74,7 +72,6 @@ export async function GET(
     return NextResponse.json({ outfit });
 
   } catch (error: any) {
-    console.error('Get outfit error:', error);
     return NextResponse.json(
       { error: 'Failed to get outfit' },
       { status: 500 }
@@ -120,7 +117,6 @@ export async function PUT(
 
     // If user doesn't exist, create them
     if (userError && userError.code === 'PGRST116') {
-      console.log('User not found, creating new user for:', userId);
       const { data: newUser, error: createError } = await supabase
         .from('users')
         .insert({
@@ -131,7 +127,6 @@ export async function PUT(
         .single();
 
       if (createError) {
-        console.error('Error creating user:', createError);
         throw createError;
       }
 
@@ -176,7 +171,6 @@ export async function PUT(
     return NextResponse.json({ outfit });
 
   } catch (error: any) {
-    console.error('Update outfit error:', error);
     return NextResponse.json(
       { error: 'Failed to update outfit' },
       { status: 500 }
@@ -210,7 +204,6 @@ export async function DELETE(
 
     // If user doesn't exist, create them
     if (userError && userError.code === 'PGRST116') {
-      console.log('User not found, creating new user for:', userId);
       const { data: newUser, error: createError } = await supabase
         .from('users')
         .insert({
@@ -221,7 +214,6 @@ export async function DELETE(
         .single();
 
       if (createError) {
-        console.error('Error creating user:', createError);
         throw createError;
       }
 
@@ -257,7 +249,6 @@ export async function DELETE(
       try {
         await cloudinaryHelpers.deleteImage(outfit.cloudinary_public_id);
       } catch (cloudinaryError) {
-        console.error('Failed to delete image from Cloudinary:', cloudinaryError);
         // Continue with database deletion even if Cloudinary deletion fails
       }
     }
@@ -279,7 +270,6 @@ export async function DELETE(
     });
 
   } catch (error: any) {
-    console.error('Delete outfit error:', error);
     return NextResponse.json(
       { error: 'Failed to delete outfit' },
       { status: 500 }

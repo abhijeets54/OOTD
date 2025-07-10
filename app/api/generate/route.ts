@@ -47,11 +47,6 @@ export async function POST(request: Request) {
     return NextResponse.json(response);
 
   } catch (error: any) {
-    console.error('Gemini API error:', {
-      message: error.message,
-      stack: error.stack
-    });
-
     // Handle different types of errors
     if (error.message.includes('GOOGLE_API_KEY')) {
       return NextResponse.json(

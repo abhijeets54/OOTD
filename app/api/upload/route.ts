@@ -39,7 +39,6 @@ export async function POST(request: Request) {
     const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
     if (!cloudName || !apiKey || !apiSecret) {
-      console.error('Missing Cloudinary configuration');
       return NextResponse.json(
         { error: 'Server configuration error' },
         { status: 500 }
@@ -80,10 +79,6 @@ export async function POST(request: Request) {
     uploadFormData.append('signature', signature);
     uploadFormData.append('folder', folder);
 
-    console.log('Uploading to Cloudinary with signed upload');
-    console.log('Cloud name:', cloudName);
-    console.log('Folder:', folder);
-
     const response = await fetch(cloudinaryUrl, {
       method: 'POST',
       body: uploadFormData,
@@ -91,7 +86,6 @@ export async function POST(request: Request) {
 
     if (!response.ok) {
       const errorData = await response.text();
-      console.error('Cloudinary upload error:', errorData);
       throw new Error(`Cloudinary upload failed: ${response.status}`);
     }
 
@@ -104,7 +98,6 @@ export async function POST(request: Request) {
       height: result.height,
     });
   } catch (error) {
-    console.error('Upload error:', error);
     return NextResponse.json(
       { error: 'Error uploading file' },
       { status: 500 }

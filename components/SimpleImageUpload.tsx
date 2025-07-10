@@ -85,7 +85,6 @@ export default function SimpleImageUpload({
       fashionToast.upload.success();
       setPreview(null);
     } catch (error) {
-      console.error('Upload error:', error);
       fashionToast.upload.error('Upload failed. Please try again.');
       setPreview(null);
     } finally {

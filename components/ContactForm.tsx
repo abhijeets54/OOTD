@@ -49,7 +49,6 @@ export default function ContactForm({
         throw new Error(errorData.error || 'Form submission failed');
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
       const errorMessage = error instanceof Error ? error.message : 'There was an error submitting your message. Please try again.';
       setError(errorMessage);
       fashionToast.form.error('contact message', errorMessage);

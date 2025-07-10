@@ -154,7 +154,6 @@ export async function generateDynamicQuestions(
         !parsedResponse.questions ||
         !Array.isArray(parsedResponse.questions)
       ) {
-        console.error("Invalid response structure");
         return sampleQuestions;
       }
 
@@ -204,14 +203,11 @@ export async function generateDynamicQuestions(
         return validQuestions;
       }
 
-      console.warn("Invalid number of questions or validation failed");
       return sampleQuestions;
     } catch (parseError) {
-      console.error("Error parsing response:", parseError);
       return sampleQuestions;
     }
   } catch (error) {
-    console.error("Error generating questions:", error);
     return sampleQuestions;
   }
 }
@@ -350,18 +346,14 @@ export async function generateOutfitReport(formData: FormData) {
       );
 
       if (!hasAllFields) {
-        console.error("Response missing required fields");
         return sampleReport;
       }
 
       return parsedResponse;
     } catch (parseError) {
-      console.error("Error parsing response:", parseError);
-      console.error("Raw response:", response.data.response);
       return sampleReport;
     }
   } catch (error) {
-    console.error("Error generating outfit report:", error);
     return sampleReport;
   }
 }

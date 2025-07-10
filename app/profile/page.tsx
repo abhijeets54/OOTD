@@ -84,7 +84,6 @@ export default function ProfilePage() {
         comfortPriority: data.user.preferences?.comfort_priority || 5
       });
     } catch (error) {
-      console.error('Error loading profile:', error);
       fashionToast.error('Failed to load profile');
     } finally {
       setLoading(false);
@@ -137,7 +136,6 @@ export default function ProfilePage() {
 
       fashionToast.success('Profile Created! 👤', 'Your profile has been created successfully. You can now customize your style preferences.');
     } catch (error) {
-      console.error('Error creating profile:', error);
       fashionToast.api.error('Create Profile', 'Failed to create your profile. Please try again.');
     } finally {
       setLoading(false);
@@ -173,7 +171,6 @@ export default function ProfilePage() {
       setProfile(data.user);
       fashionToast.success('Profile Updated! ✨', 'Your style preferences have been saved successfully.');
     } catch (error) {
-      console.error('Error updating profile:', error);
       fashionToast.api.error('Update Profile', 'Failed to update your profile. Please try again.');
     } finally {
       setSaving(false);

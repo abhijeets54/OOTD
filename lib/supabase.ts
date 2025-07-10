@@ -90,7 +90,6 @@ export async function getOrCreateUser(userId: string) {
 
   // If user doesn't exist, create them
   if (error && error.code === 'PGRST116') {
-    console.log('User not found, creating new user for:', userId);
     const { data: newUser, error: createError } = await supabase
       .from('users')
       .insert({
@@ -101,7 +100,6 @@ export async function getOrCreateUser(userId: string) {
       .single();
 
     if (createError) {
-      console.error('Error creating user:', createError);
       throw createError;
     }
 

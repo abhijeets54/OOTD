@@ -45,7 +45,6 @@ export default function ImageUpload({
 
   const handleUploadError = (error: any) => {
     setIsUploading(false);
-    console.error('Upload error:', error);
     fashionToast.upload.error('Please check your Cloudinary configuration.');
   };
 

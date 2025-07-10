@@ -36,8 +36,6 @@ export async function POST(request: Request) {
 
     // For Pollinations.ai, we'll return the URL directly since it's a reliable service
     // and HEAD requests might fail due to CORS or other restrictions while the actual image works fine
-    console.log(`Generated Pollinations.ai URL with ${selectedModel} model: ${imageUrl}`);
-
     return NextResponse.json({
       success: true,
       imageUrl: imageUrl,
@@ -47,8 +45,6 @@ export async function POST(request: Request) {
     });
 
   } catch (error) {
-    console.error('Pollinations.ai image generation error:', error);
-
     return NextResponse.json({
       success: false,
       error: error instanceof Error ? error.message : 'Pollinations.ai service failed'

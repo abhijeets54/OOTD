@@ -42,7 +42,6 @@ export const cloudinaryHelpers = {
         height: result.height,
       };
     } catch (error) {
-      console.error('Cloudinary upload error:', error);
       throw new Error('Failed to upload image to Cloudinary');
     }
   },
@@ -52,7 +51,6 @@ export const cloudinaryHelpers = {
     try {
       await cloudinary.uploader.destroy(publicId);
     } catch (error) {
-      console.error('Cloudinary delete error:', error);
       throw new Error('Failed to delete image from Cloudinary');
     }
   },

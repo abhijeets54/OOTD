@@ -129,7 +129,6 @@ export async function generateWithGemini(request: GeminiRequest): Promise<Gemini
     };
 
   } catch (error: any) {
-    console.error("Gemini API error:", error);
     throw new Error(`Failed to generate response: ${error.message}`);
   }
 }
@@ -217,7 +216,6 @@ export async function generateDynamicQuestions(
 
     return parsedResponse;
   } catch (error) {
-    console.error("Error parsing dynamic questions response:", error);
     // Return fallback questions
     return {
       questions: [
@@ -334,17 +332,14 @@ export async function generateOutfitReportWithGemini(
       );
 
       if (!hasAllFields) {
-        console.error("Response missing required fields");
         throw new Error("Incomplete response from AI");
       }
 
       return parsedResponse;
     } catch (parseError) {
-      console.error("Error parsing outfit report response:", parseError);
       throw new Error("Failed to parse outfit recommendation");
     }
   } catch (error) {
-    console.error("Error generating outfit report:", error);
     throw error;
   }
 }
@@ -446,7 +441,6 @@ export async function analyzeOutfitImage(
 
       return analysis;
     } catch (parseError) {
-      console.error("Error parsing image analysis response:", parseError);
       // Return a fallback analysis
       return {
         outfit_description: "Unable to analyze outfit details",
@@ -477,7 +471,6 @@ export async function analyzeOutfitImage(
     }
 
   } catch (error) {
-    console.error("Error analyzing outfit image:", error);
     throw new Error("Failed to analyze outfit image");
   }
 }

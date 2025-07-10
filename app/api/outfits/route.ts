@@ -24,7 +24,6 @@ export async function GET() {
 
     // If user doesn't exist, create them
     if (userError && userError.code === 'PGRST116') {
-      console.log('User not found, creating new user for:', userId);
       const { data: newUser, error: createError } = await supabase
         .from('users')
         .insert({
@@ -35,7 +34,6 @@ export async function GET() {
         .single();
 
       if (createError) {
-        console.error('Error creating user:', createError);
         throw createError;
       }
 
@@ -63,13 +61,6 @@ export async function GET() {
     return NextResponse.json({ outfits });
 
   } catch (error: any) {
-    console.error('Get outfits error:', error);
-    console.error('Error details:', {
-      message: error.message,
-      code: error.code,
-      details: error.details,
-      hint: error.hint
-    });
     return NextResponse.json(
       { error: 'Failed to get outfits', details: error.message },
       { status: 500 }
@@ -81,7 +72,6 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const { userId } = await auth();
-    console.log('POST /api/outfits - userId:', userId);
 
     if (!userId) {
       return NextResponse.json(
@@ -121,7 +111,6 @@ export async function POST(request: Request) {
 
     // If user doesn't exist, create them
     if (userError && userError.code === 'PGRST116') {
-      console.log('User not found, creating new user for:', userId);
       const { data: newUser, error: createError } = await supabase
         .from('users')
         .insert({
@@ -132,7 +121,6 @@ export async function POST(request: Request) {
         .single();
 
       if (createError) {
-        console.error('Error creating user:', createError);
         throw createError;
       }
 
@@ -172,13 +160,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ outfit }, { status: 201 });
 
   } catch (error: any) {
-    console.error('Create outfit error:', error);
-    console.error('Error details:', {
-      message: error.message,
-      code: error.code,
-      details: error.details,
-      hint: error.hint
-    });
     return NextResponse.json(
       { error: 'Failed to create outfit', details: error.message },
       { status: 500 }

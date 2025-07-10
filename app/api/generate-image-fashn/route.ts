@@ -44,8 +44,7 @@ export async function POST(request: Request) {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('FASHN.ai API error:', response.status, errorText);
-      
+
       return NextResponse.json({
         success: false,
         error: `FASHN.ai API error: ${response.status}`
@@ -61,8 +60,6 @@ export async function POST(request: Request) {
     });
 
   } catch (error) {
-    console.error('FASHN.ai image generation error:', error);
-    
     return NextResponse.json({
       success: false,
       error: 'FASHN.ai service failed'
