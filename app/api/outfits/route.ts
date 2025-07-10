@@ -46,8 +46,14 @@ export async function GET() {
 
   } catch (error: any) {
     console.error('Get outfits error:', error);
+    console.error('Error details:', {
+      message: error.message,
+      code: error.code,
+      details: error.details,
+      hint: error.hint
+    });
     return NextResponse.json(
-      { error: 'Failed to get outfits' },
+      { error: 'Failed to get outfits', details: error.message },
       { status: 500 }
     );
   }
@@ -57,6 +63,8 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const { userId } = await auth();
+    console.log('POST /api/outfits - userId:', userId);
+
     if (!userId) {
       return NextResponse.json(
         { error: 'Unauthorized' },
@@ -129,8 +137,14 @@ export async function POST(request: Request) {
 
   } catch (error: any) {
     console.error('Create outfit error:', error);
+    console.error('Error details:', {
+      message: error.message,
+      code: error.code,
+      details: error.details,
+      hint: error.hint
+    });
     return NextResponse.json(
-      { error: 'Failed to create outfit' },
+      { error: 'Failed to create outfit', details: error.message },
       { status: 500 }
     );
   }
