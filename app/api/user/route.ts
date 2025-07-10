@@ -14,20 +14,38 @@ export async function GET() {
     }
 
     const supabase = createServerSupabaseClient()
-    const { data: user, error } = await supabase
+    let { data: user, error } = await supabase
       .from('users')
       .select('*')
       .eq('clerk_user_id', userId)
       .single()
 
-    if (error && error.code !== 'PGRST116') {
+    // If user doesn't exist, create them
+    if (error && error.code === 'PGRST116') {
+      console.log('User not found, creating new user for:', userId);
+      const { data: newUser, error: createError } = await supabase
+        .from('users')
+        .insert({
+          clerk_user_id: userId,
+          preferences: {}
+        })
+        .select()
+        .single();
+
+      if (createError) {
+        console.error('Error creating user:', createError);
+        throw createError;
+      }
+
+      user = newUser;
+    } else if (error) {
       throw error
     }
-    
+
     if (!user) {
       return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
+        { error: 'Failed to get or create user' },
+        { status: 500 }
       );
     }
 

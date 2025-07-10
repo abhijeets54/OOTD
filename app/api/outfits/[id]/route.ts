@@ -20,21 +20,39 @@ export async function GET(
     const { id: outfitId } = await params;
     const supabase = createServerSupabaseClient();
 
-    // Get user from database
-    const { data: user, error: userError } = await supabase
+    // Get user from database, create if doesn't exist
+    let { data: user, error: userError } = await supabase
       .from('users')
       .select('*')
       .eq('clerk_user_id', userId)
       .single();
 
-    if (userError && userError.code !== 'PGRST116') {
+    // If user doesn't exist, create them
+    if (userError && userError.code === 'PGRST116') {
+      console.log('User not found, creating new user for:', userId);
+      const { data: newUser, error: createError } = await supabase
+        .from('users')
+        .insert({
+          clerk_user_id: userId,
+          preferences: {}
+        })
+        .select()
+        .single();
+
+      if (createError) {
+        console.error('Error creating user:', createError);
+        throw createError;
+      }
+
+      user = newUser;
+    } else if (userError) {
       throw userError;
     }
 
     if (!user) {
       return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
+        { error: 'Failed to get or create user' },
+        { status: 500 }
       );
     }
 
@@ -93,14 +111,32 @@ export async function PUT(
 
     const supabase = createServerSupabaseClient();
 
-    // Get user from database
-    const { data: user, error: userError } = await supabase
+    // Get user from database, create if doesn't exist
+    let { data: user, error: userError } = await supabase
       .from('users')
       .select('*')
       .eq('clerk_user_id', userId)
       .single();
 
-    if (userError && userError.code !== 'PGRST116') {
+    // If user doesn't exist, create them
+    if (userError && userError.code === 'PGRST116') {
+      console.log('User not found, creating new user for:', userId);
+      const { data: newUser, error: createError } = await supabase
+        .from('users')
+        .insert({
+          clerk_user_id: userId,
+          preferences: {}
+        })
+        .select()
+        .single();
+
+      if (createError) {
+        console.error('Error creating user:', createError);
+        throw createError;
+      }
+
+      user = newUser;
+    } else if (userError) {
       throw userError;
     }
 
@@ -165,21 +201,39 @@ export async function DELETE(
     const { id: outfitId } = await params;
     const supabase = createServerSupabaseClient();
 
-    // Get user from database
-    const { data: user, error: userError } = await supabase
+    // Get user from database, create if doesn't exist
+    let { data: user, error: userError } = await supabase
       .from('users')
       .select('*')
       .eq('clerk_user_id', userId)
       .single();
 
-    if (userError && userError.code !== 'PGRST116') {
+    // If user doesn't exist, create them
+    if (userError && userError.code === 'PGRST116') {
+      console.log('User not found, creating new user for:', userId);
+      const { data: newUser, error: createError } = await supabase
+        .from('users')
+        .insert({
+          clerk_user_id: userId,
+          preferences: {}
+        })
+        .select()
+        .single();
+
+      if (createError) {
+        console.error('Error creating user:', createError);
+        throw createError;
+      }
+
+      user = newUser;
+    } else if (userError) {
       throw userError;
     }
 
     if (!user) {
       return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
+        { error: 'Failed to get or create user' },
+        { status: 500 }
       );
     }
 
