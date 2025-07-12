@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -13,16 +13,12 @@ import {
   Palette,
   Lightbulb,
   Heart,
-  Share2,
   Printer,
-  Twitter,
-  Facebook,
-  Instagram,
   Download,
   RefreshCcw
 } from "lucide-react";
 import { generateOutfitReport } from "@/lib/llama";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import html2canvas from 'html2canvas';
 import { FormData } from "@/lib/llama";
 import { fashionToast } from '@/lib/toast';
@@ -175,9 +171,7 @@ export function OutfitReport({ formData }: { formData: FormData }){
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [fallbackImageUrl, setFallbackImageUrl] = useState<string | null>(null);
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
-  const [currentService, setCurrentService] = useState<string>("");
   const [isRegenerating, setIsRegenerating] = useState(false);
-  const queryClient = useQueryClient();
 
   const { data: report, isLoading, error, refetch } = useQuery({
     queryKey: ['outfitReport', formData],
@@ -262,13 +256,10 @@ export function OutfitReport({ formData }: { formData: FormData }){
     // Try each service in order
     for (const service of services) {
       try {
-        setCurrentService(service.name);
-
         const imageUrl = await service.execute();
 
         setGeneratedImage(imageUrl);
         setIsGeneratingImage(false);
-        setCurrentService("");
         fashionToast.success('Outfit Image Generated! 🎨', 'Your AI-generated outfit visualization is ready');
         return;
 
@@ -283,7 +274,6 @@ export function OutfitReport({ formData }: { formData: FormData }){
 
     // If all services fail
     setIsGeneratingImage(false);
-    setCurrentService("");
   };
 
   const shareOnSocial = async (platform: string) => {
@@ -451,7 +441,7 @@ export function OutfitReport({ formData }: { formData: FormData }){
       <div className="grid gap-6 md:grid-cols-2">
         <Card className="card-3d p-6 border-l-4 border-l-purple-500 bg-gradient-to-br from-white to-purple-50">
           <div className="flex items-center mb-4">
-            <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mr-3 animate-float">
+            <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mr-3">
               <Shirt className="h-5 w-5 text-purple-600" />
             </div>
             <h3 className="font-semibold text-lg text-purple-700">Upper Wear</h3>
@@ -461,7 +451,7 @@ export function OutfitReport({ formData }: { formData: FormData }){
 
         <Card className="card-3d p-6 border-l-4 border-l-blue-500 bg-gradient-to-br from-white to-blue-50">
           <div className="flex items-center mb-4">
-            <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-3 animate-float" style={{animationDelay: '0.5s'}}>
+            <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-3">
               <Pants className="h-5 w-5 text-blue-600" />
             </div>
             <h3 className="font-semibold text-lg text-blue-700">Lower Wear</h3>
@@ -471,7 +461,7 @@ export function OutfitReport({ formData }: { formData: FormData }){
 
         <Card className="card-3d p-6 border-l-4 border-l-teal-500 bg-gradient-to-br from-white to-teal-50">
           <div className="flex items-center mb-4">
-            <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center mr-3 animate-float" style={{animationDelay: '1s'}}>
+            <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center mr-3">
               <Shoe className="h-5 w-5 text-teal-600" />
             </div>
             <h3 className="font-semibold text-lg text-teal-700">Footwear</h3>
@@ -481,7 +471,7 @@ export function OutfitReport({ formData }: { formData: FormData }){
 
         <Card className="card-3d p-6 border-l-4 border-l-amber-500 bg-gradient-to-br from-white to-amber-50">
           <div className="flex items-center mb-4">
-            <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center mr-3 animate-float" style={{animationDelay: '1.5s'}}>
+            <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center mr-3">
               <Crown className="h-5 w-5 text-amber-600" />
             </div>
             <h3 className="font-semibold text-lg text-amber-700">Headwear</h3>
@@ -492,7 +482,7 @@ export function OutfitReport({ formData }: { formData: FormData }){
 
       <Card className="card-3d p-6 border-l-4 border-l-pink-500 bg-gradient-to-br from-white to-pink-50">
         <div className="flex items-center mb-4">
-          <div className="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center mr-3 animate-float" style={{animationDelay: '2s'}}>
+          <div className="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center mr-3">
             <Gem className="h-5 w-5 text-pink-600" />
           </div>
           <h3 className="font-semibold text-lg text-pink-700">Accessories</h3>
@@ -507,7 +497,7 @@ export function OutfitReport({ formData }: { formData: FormData }){
       <div className="grid gap-6 md:grid-cols-2">
         <Card className="card-3d p-6 border-l-4 border-l-indigo-500 bg-gradient-to-br from-white to-indigo-50">
           <div className="flex items-center mb-4">
-            <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center mr-3 animate-float" style={{animationDelay: '2.5s'}}>
+            <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center mr-3">
               <Palette className="h-5 w-5 text-indigo-600" />
             </div>
             <h3 className="font-semibold text-lg text-indigo-700">Color Palette</h3>
@@ -516,7 +506,7 @@ export function OutfitReport({ formData }: { formData: FormData }){
             {report?.colors?.map((color: string, index: number) => (
               <span
                 key={index}
-                className="px-3 py-1 rounded-full text-sm shadow-sm animate-fadeIn hover-lift"
+                className="px-3 py-1 rounded-full text-sm shadow-sm hover-lift"
                 style={{
                   backgroundColor: color.toLowerCase().includes('black') ? '#333' :
                                    color.toLowerCase().includes('white') ? '#f8f8f8' :
@@ -533,7 +523,7 @@ export function OutfitReport({ formData }: { formData: FormData }){
 
         <Card className="card-3d p-6 border-l-4 border-l-green-500 bg-gradient-to-br from-white to-green-50">
           <div className="flex items-center mb-4">
-            <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mr-3 animate-float" style={{animationDelay: '3s'}}>
+            <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mr-3">
               <Lightbulb className="h-5 w-5 text-green-600" />
             </div>
             <h3 className="font-semibold text-lg text-green-700">Styling Tips</h3>
@@ -548,7 +538,7 @@ export function OutfitReport({ formData }: { formData: FormData }){
 
       <Card className="card-3d p-6 border-l-4 border-l-rose-500 bg-gradient-to-br from-white to-rose-50">
         <div className="flex items-center mb-4">
-          <div className="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center mr-3 animate-float" style={{animationDelay: '3.5s'}}>
+          <div className="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center mr-3">
             <Heart className="h-5 w-5 text-rose-600" />
           </div>
           <h3 className="font-semibold text-lg text-rose-700">Cultural Considerations</h3>
@@ -562,7 +552,7 @@ export function OutfitReport({ formData }: { formData: FormData }){
 
       <Card className="card-3d p-6 border-l-4 border-l-emerald-500 bg-gradient-to-br from-white to-emerald-50">
         <h3 className="font-semibold text-lg text-emerald-700 mb-4 flex items-center">
-          <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center mr-3 animate-float" style={{animationDelay: '4s'}}>
+          <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center mr-3">
             <span className="text-emerald-600 font-bold">$</span>
           </div>
           Budget Options
@@ -599,7 +589,7 @@ export function OutfitReport({ formData }: { formData: FormData }){
                   }
                 }}
               />
-              <div className="flex gap-2 mt-4">
+              <div className="flex justify-center mt-4">
                 <Button
                   variant="outline"
                   size="sm"
@@ -609,57 +599,46 @@ export function OutfitReport({ formData }: { formData: FormData }){
                     link.download = 'ai-generated-outfit.png';
                     link.click();
                   }}
-                  className="flex-1 bg-gray-100 border-gray-300 text-gray-900 hover:bg-gray-200"
+                  className="bg-gray-100 border-gray-300 text-gray-900 hover:bg-gray-200"
                 >
-                  Download
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setGeneratedImage(null)}
-                  className="flex-1 bg-gray-100 border-gray-300 text-gray-900 hover:bg-gray-200"
-                >
-                  Generate New
+                  <Download className="h-4 w-4 mr-2" />
+                  Download Image
                 </Button>
               </div>
             </div>
           )}
 
-          {/* Generation Button */}
-          <div className="flex justify-center w-full max-w-lg">
-            <Button
-              size="lg"
-              className="flex items-center justify-center gap-2 bg-gray-900 hover:bg-gray-800 text-white transform hover:scale-105 transition-all duration-300 shadow-lg px-8"
-              onClick={handleGenerateImage}
-              disabled={isGeneratingImage || isRegenerating || isLoading}
-            >
-              {isGeneratingImage ? (
-                <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                  {currentService === 'Hugging Face' ? 'Generating HD Quality...' :
-                   currentService === 'Pollinations.ai' ? 'Trying Backup Service...' :
-                   'Generating...'}
-                </>
-              ) : (
-                <>
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                  </svg>
-                  Generate Outfit Image
-                </>
-              )}
-            </Button>
-          </div>
+          {/* Generation Button - Only show if no image has been generated */}
+          {!generatedImage && (
+            <div className="flex justify-center w-full max-w-lg">
+              <Button
+                size="lg"
+                className="flex items-center justify-center gap-2 bg-gray-900 hover:bg-gray-800 text-white transform hover:scale-105 transition-all duration-300 shadow-lg px-8"
+                onClick={handleGenerateImage}
+                disabled={isGeneratingImage || isRegenerating || isLoading}
+              >
+                {isGeneratingImage ? (
+                  <>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                    Generating Your Outfit...
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                    Generate Outfit Image
+                  </>
+                )}
+              </Button>
+            </div>
+          )}
 
           <p className="text-gray-600 text-sm text-center max-w-md font-medium">
             {generatedImage
-              ? 'Your AI-generated outfit visualization is ready!'
+              ? 'Your AI-generated outfit visualization is ready! You can download it using the button above.'
               : isGeneratingImage
-                ? currentService === 'Hugging Face'
-                  ? 'Generating high-quality image with Hugging Face...'
-                  : currentService === 'Pollinations.ai'
-                  ? 'Trying backup service (Pollinations AI)...'
-                  : 'Generating...'
+                ? 'Creating your personalized outfit visualization...'
                 : 'Generate a visual representation of your outfit using AI'
             }
           </p>

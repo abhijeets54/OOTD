@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { SignInButton, SignUpButton, SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import { LoaderLink } from "@/components/ui/LoaderLink";
@@ -226,7 +226,7 @@ const FeaturesSection = () => {
               <Card className="card-3d h-full border-0 bg-gradient-to-br from-white to-gray-50">
                 <CardContent className="p-8">
                   <div className="flex items-center justify-center mb-6">
-                    <div className={`p-4 rounded-2xl bg-gradient-to-r ${feature.color} animate-float`} style={{animationDelay: `${index * 0.5}s`}}>
+                    <div className={`p-4 rounded-2xl bg-gradient-to-r ${feature.color}`}>
                       <feature.icon className="h-8 w-8 text-white" />
                     </div>
                   </div>
@@ -425,7 +425,7 @@ const AIOutfitGeneratorSection = () => {
           >
             {/* AI Questions Card */}
             <div className="card-3d relative bg-white rounded-2xl p-6 border border-purple-100">
-              <div className="absolute -top-4 -right-4 w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center animate-float">
+              <div className="absolute -top-4 -right-4 w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
                 <Sparkles className="h-4 w-4 text-white" />
               </div>
 
@@ -459,7 +459,7 @@ const AIOutfitGeneratorSection = () => {
 
             {/* AI Visualization Card */}
             <div className="card-3d relative bg-white rounded-2xl p-6 border border-orange-100">
-              <div className="absolute -top-4 -right-4 w-8 h-8 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center animate-float" style={{animationDelay: '1s'}}>
+              <div className="absolute -top-4 -right-4 w-8 h-8 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center">
                 <Eye className="h-4 w-4 text-white" />
               </div>
 

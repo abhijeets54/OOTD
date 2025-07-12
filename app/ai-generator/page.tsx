@@ -20,17 +20,12 @@ const StepIcon = ({ step }: { step: number }) => {
   const Icon = icons[step as keyof typeof icons];
   
   return (
-    <motion.div
-      initial={{ scale: 0 }}
-      animate={{ scale: 1 }}
-      transition={{ type: "spring", stiffness: 260, damping: 20 }}
-      className="relative"
-    >
-      <div className="absolute -inset-1 bg-gradient-to-r from-purple-400 via-pink-500 to-indigo-500 rounded-full blur opacity-75 animate-pulse" />
+    <div className="relative">
+      <div className="absolute -inset-1 bg-gradient-to-r from-purple-400 via-pink-500 to-indigo-500 rounded-full blur opacity-75" />
       <div className="relative bg-white/90 backdrop-blur-sm rounded-full p-3">
         <Icon className="h-8 w-8 text-purple-600" />
       </div>
-    </motion.div>
+    </div>
   );
 };
 
